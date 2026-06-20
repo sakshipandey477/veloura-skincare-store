@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veloura Cart</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <style>
+        .cart-page {
+            padding: 50px 70px;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .cart-table {
+            background: white;
+            border-radius: 24px;
+            padding: 25px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            padding: 15px;
+            color: #3d2c2e;
+            border-bottom: 1px solid #eadbd3;
+        }
+
+        td {
+            padding: 16px;
+            border-bottom: 1px solid #f0e3dc;
+            vertical-align: middle;
+        }
+
+        .cart-product {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-product img {
+            width: 75px;
+            height: 75px;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .qty-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .qty-box a {
+            text-decoration: none;
+        }
+
+        .qty-btn {
+            background: #3d2c2e;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+        }
+
+        .remove-btn {
+            background: #c96b5c;
+            color: white;
+            padding: 9px 14px;
+            border-radius: 16px;
+            text-decoration: none;
+        }
+
+        .cart-summary {
+            margin-top: 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .total-box {
+            font-size: 24px;
+            font-weight: bold;
+            color: #3d2c2e;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 50px;
+            color: #6b5b5d;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="logo">Veloura</div>
+
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/shop">Shop</a>
+        <a href="/cart">Cart</a>
+        <a href="/logout">Logout</a>
+    </div>
+</div>
+
+<div class="cart-page">
+
+    <div class="cart-header">
+        <div>
+            <h1>Your Cart</h1>
+            <p>Home / Cart</p>
+        </div>
+
+        <a href="/shop" class="btn">← Continue Shopping</a>
+    </div>
+
+    <div class="cart-table">
+
+        {% if products %}
+
+        {% set total = namespace(value=0) %}
+
+        <table>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Subtotal</th>
+                <th>Action</th>
+            </tr>
+
+            {% for product in products %}
+
+            {% set subtotal = product.price * product.quantity %}
+            {% set total.value = total.value + subtotal %}
+
+            <tr>
+                <td>
+                    <div class="cart-product">
+                        <img src="/static/images/{{ product.image }}">
+                        <strong>{{ product.name }}</strong>
+                    </div>
+                </td>
+
+                <td>€{{ product.price }}</td>
+
+                <td>
+                    <div class="qty-box">
+                        <a href="/decrease_quantity/{{ product.cart_id }}">
+                            <span class="qty-btn">-</span>
+                        </a>
+
+                        <strong>{{ product.quantity }}</strong>
+
+                        <a href="/increase_quantity/{{ product.cart_id }}">
+                            <span class="qty-btn">+</span>
+                        </a>
+                    </div>
+                </td>
+
+                <td>€{{ subtotal }}</td>
+
+                <td>
+                    <a href="/remove_from_cart/{{ product.cart_id }}" class="remove-btn">
+                        Remove
+                    </a>
+                </td>
+            </tr>
+
+            {% endfor %}
+        </table>
+
+        <div class="cart-summary">
+            <a href="/shop" class="btn">← Continue Shopping</a>
+
+            <div class="total-box">
+                Total: €{{ total.value }}
+            </div>
+
+            <button class="btn" onclick="alert('Checkout feature coming soon!')">
+    Proceed to Checkout
+</button>
+        </div>
+
+        {% else %}
+
+        <div class="empty-cart">
+            <h2>Your cart is empty</h2>
+            <p>Add products from the shop page.</p>
+            <br>
+            <a href="/shop" class="btn">Go to Shop</a>
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+<footer class="footer">
+    <p>© 2025 Veloura. All rights reserved.</p>
+    <p>Secure checkout · Premium skincare · Fast support</p>
+</footer>
+
+</body>
+</html>

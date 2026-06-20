@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veloura Admin Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <style>
+        body {
+            background: #f8f1ec;
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: #2f2426;
+            color: white;
+            padding: 35px 25px;
+        }
+
+        .admin-sidebar h2 {
+            margin-bottom: 35px;
+            font-size: 28px;
+        }
+
+        .admin-sidebar a,
+        .admin-sidebar button {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 14px;
+            background: #4b383b;
+            color: white;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .admin-sidebar a:hover,
+        .admin-sidebar button:hover {
+            background: #b07a5b;
+        }
+
+        .admin-main {
+            flex: 1;
+            padding: 45px;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 35px;
+        }
+
+        .admin-header h1 {
+            color: #3d2c2e;
+            font-size: 34px;
+        }
+
+        .admin-card {
+            background: white;
+            padding: 28px;
+            border-radius: 24px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+            margin-bottom: 35px;
+        }
+
+        .admin-card h2 {
+            margin-bottom: 20px;
+            color: #3d2c2e;
+        }
+
+        .product-form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .product-form input {
+            padding: 13px;
+            border: 1px solid #dcc8bd;
+            border-radius: 14px;
+            min-width: 210px;
+        }
+
+        .admin-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .admin-table th {
+            text-align: left;
+            padding: 14px;
+            background: #f4e7df;
+            color: #3d2c2e;
+        }
+
+        .admin-table td {
+            padding: 14px;
+            border-bottom: 1px solid #eadbd3;
+            vertical-align: middle;
+        }
+
+        .admin-table img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 14px;
+        }
+
+        .action-btn {
+            padding: 9px 14px;
+            border-radius: 14px;
+            text-decoration: none;
+            color: white;
+            margin-right: 8px;
+            display: inline-block;
+        }
+
+        .edit-btn {
+            background: #3d2c2e;
+        }
+
+        .delete-btn {
+            background: #c96b5c;
+        }
+
+        .small-text {
+            color: #6b5b5d;
+            margin-top: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="admin-layout">
+
+    <div class="admin-sidebar">
+        <h2>Veloura</h2>
+
+        <button onclick="history.back()">← Back</button>
+
+        <a href="/admin">Dashboard</a>
+        <a href="/shop">View Shop</a>
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="admin-main">
+
+        <div class="admin-header">
+            <div>
+                <h1>Admin Dashboard</h1>
+                <p class="small-text">Manage Veloura skincare products</p>
+            </div>
+        </div>
+
+        <div class="admin-card">
+            <h2>Add New Product</h2>
+
+            <form class="product-form" method="POST" action="/add_product">
+                <input type="text" name="name" placeholder="Product name" required>
+
+                <input type="number" name="price" placeholder="Price" required>
+
+                <input type="text" name="image" placeholder="Image filename">
+
+                <button type="submit" class="btn">Add Product</button>
+            </form>
+
+            <p class="small-text">
+                Example image names: serum.png, cream.png, sunscreen.png, cleanser.png
+            </p>
+        </div>
+
+        <div class="admin-card">
+            <h2>Product List ({{ products|length }} Products)</h2>
+
+            <table class="admin-table">
+                <tr>
+                    <th>Image</th>
+                    <th>Product Name</th>
+                    <th>Price</th>
+                    <th>Image File</th>
+                    <th>Actions</th>
+                </tr>
+
+                {% for product in products %}
+                <tr>
+                    <td>
+                        <img src="/static/images/{{ product.image }}">
+                    </td>
+
+                    <td>{{ product.name }}</td>
+
+                    <td>€{{ product.price }}</td>
+
+                    <td>{{ product.image }}</td>
+
+                    <td>
+                        <a href="/edit_product/{{ product.id }}" class="action-btn edit-btn">
+                            Edit
+                        </a>
+
+                        <a href="/delete_product/{{ product.id }}"
+   class="action-btn delete-btn"
+   onclick="return confirm('Are you sure you want to delete this product?')">
+    Delete
+</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Product</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <style>
+        body {
+            background: #f8f1ec;
+        }
+
+        .edit-page {
+            min-height: 100vh;
+            display: flex;
+        }
+
+        .edit-sidebar {
+            width: 250px;
+            background: #2f2426;
+            color: white;
+            padding: 35px 25px;
+        }
+
+        .edit-sidebar h2 {
+            margin-bottom: 35px;
+            font-size: 28px;
+        }
+
+        .edit-sidebar a,
+        .edit-sidebar button {
+            display: block;
+            width: 100%;
+            margin: 12px 0;
+            padding: 12px;
+            border-radius: 14px;
+            background: #4b383b;
+            color: white;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .edit-sidebar a:hover,
+        .edit-sidebar button:hover {
+            background: #b07a5b;
+        }
+
+        .edit-main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 50px;
+        }
+
+        .edit-card {
+            background: white;
+            width: 430px;
+            padding: 40px;
+            border-radius: 28px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+        }
+
+        .edit-card h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            color: #3d2c2e;
+        }
+
+        .edit-card p {
+            text-align: center;
+            color: #6b5b5d;
+            margin-bottom: 25px;
+        }
+
+        .edit-card input {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border: 1px solid #dcc8bd;
+            border-radius: 15px;
+        }
+
+        .edit-card button {
+            width: 100%;
+            margin-top: 18px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="edit-page">
+
+    <div class="edit-sidebar">
+        <h2>Veloura</h2>
+
+        <button onclick="history.back()">← Back</button>
+
+        <a href="/admin">Dashboard</a>
+        <a href="/shop">View Shop</a>
+        <a href="/">Home</a>
+        <a href="/logout">Logout</a>
+    </div>
+
+    <div class="edit-main">
+
+        <div class="edit-card">
+
+            <h1>Edit Product</h1>
+
+            <p>Update product details below</p>
+
+            <form method="POST" action="/update_product/{{ product.id }}">
+
+                <input
+                    type="text"
+                    name="name"
+                    value="{{ product.name }}"
+                    placeholder="Product name"
+                    required>
+
+                <input
+                    type="number"
+                    name="price"
+                    value="{{ product.price }}"
+                    placeholder="Price"
+                    required>
+
+                <input
+                    type="text"
+                    name="image"
+                    value="{{ product.image }}"
+                    placeholder="Image filename">
+
+                <button type="submit" class="btn">
+                    Update Product
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

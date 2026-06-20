@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Veloura Login</title>
+
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+
+<div class="form-page">
+
+    <div class="form-image">
+        <img src="/static/images/loginpage.png" alt="Veloura skincare">
+    </div>
+
+    <div class="form-side">
+
+        <div class="form-box">
+
+            <a href="/">
+    <button class="btn" style="margin-bottom:20px;">
+        ← Back to Home
+    </button>
+</a>
+            <h1>Veloura</h1>
+            <h2>Welcome Back</h2>
+
+            <p>Login to your Veloura account</p>
+            {% if request.args.get('error') == 'invalid' %}
+<p style="color:red; font-weight:bold;">Invalid username or password</p>
+{% endif %}
+
+            <form method="POST" action="/login">
+
+                <input type="text"
+                       name="username"
+                       placeholder="Enter your username"
+                       required>
+
+                <input type="password"
+                       name="password"
+                       placeholder="Enter your password"
+                       required>
+
+                <button type="submit" class="btn">
+                    Login
+                </button>
+
+            </form>
+
+            <p style="margin-top:20px;">
+                Don’t have an account?
+                <a href="/register" style="color:#b07a5b; font-weight:bold; text-decoration:none;">
+                    Register
+                </a>
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>

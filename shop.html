@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Veloura Shop</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+
+    <style>
+        .shop-hero {
+            margin: 35px 70px;
+            height: 280px;
+            border-radius: 28px;
+            background-image: url("/static/images/shoppage.png");
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            padding: 45px;
+            box-shadow: 0 12px 35px rgba(0,0,0,0.08);
+        }
+
+        .shop-hero-box {
+            background: rgba(255,255,255,0.75);
+            padding: 28px;
+            border-radius: 22px;
+            width: 420px;
+        }
+
+        .shop-layout {
+            display: flex;
+            gap: 30px;
+            padding: 30px 70px 70px;
+        }
+
+        .sidebar {
+            width: 240px;
+            background: white;
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+            height: fit-content;
+        }
+
+        .sidebar h3 {
+            margin-bottom: 15px;
+        }
+
+        .sidebar p {
+            margin: 12px 0;
+            color: #6b5b5d;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 13px;
+            border: 1px solid #dcc8bd;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .shop-products {
+            flex: 1;
+        }
+
+        .product-grid {
+            display: flex;
+            gap: 25px;
+            flex-wrap: wrap;
+        }
+
+        .product-card {
+            background: white;
+            width: 260px;
+            padding: 18px;
+            border-radius: 24px;
+            box-shadow: 0 10px 28px rgba(0,0,0,0.08);
+            transition: 0.3s;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+        }
+
+        .product-card img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            border-radius: 20px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            margin-bottom: 8px;
+            color: #3d2c2e;
+        }
+
+        .top-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .top-actions h1 {
+            font-size: 32px;
+        }
+        .category-btn {
+    display: block;
+    width: 100%;
+    background: #f4e7df;
+    color: #3d2c2e;
+    border: none;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 14px;
+    cursor: pointer;
+    text-align: left;
+    font-weight: bold;
+}
+
+.category-btn:hover {
+    background: #b07a5b;
+    color: white;
+}
+    </style>
+</head>
+
+<body>
+
+<div class="navbar">
+    <div class="logo">Veloura</div>
+
+    <div class="nav-links">
+
+        <span style="margin-right:20px; font-weight:bold;">
+            Welcome, {{ session.username }}
+        </span>
+
+        <a href="/">Home</a>
+        <a href="/shop">Shop</a>
+        <a href="/cart">Cart</a>
+        <a href="/logout">Logout</a>
+
+    </div>
+</div>
+
+<div class="shop-hero">
+    <div class="shop-hero-box">
+        <h1>Shop All Products</h1>
+        <p>
+            Explore premium skincare essentials created for healthy,
+            glowing and radiant skin.
+        </p>
+        <button onclick="history.back()" class="btn">← Back</button>
+    </div>
+</div>
+
+{% if request.args.get('message') == 'added' %}
+<div class="message-success">
+    ✓ Product added to cart successfully!
+</div>
+{% endif %}
+
+<div class="shop-layout">
+
+    <div class="sidebar">
+        <h3>Search</h3>
+
+        <input
+            type="text"
+            id="searchInput"
+            placeholder="Search products..."
+            onkeyup="searchProducts()">
+
+        <h3>Categories</h3>
+        <button class="category-btn" onclick="filterCategory('all')">All Products</button>
+<button class="category-btn" onclick="filterCategory('serum')">Serums</button>
+<button class="category-btn" onclick="filterCategory('cream')">Moisturizers</button>
+<button class="category-btn" onclick="filterCategory('sunscreen')">Sunscreens</button>
+<button class="category-btn" onclick="filterCategory('cleanser')">Cleansers</button>
+<button class="category-btn" onclick="filterCategory('aloe')">Aloe Care</button>
+    </div>
+
+    <div class="shop-products">
+
+        <div class="top-actions">
+            <h1>Our Products</h1>
+
+           <a href="/cart" class="btn">
+    🛒 My Cart ({{ cart_count }})
+</a>
+        </div>
+
+        <div class="product-grid">
+
+            {% for product in products %}
+
+            <div class="product-card">
+
+                <img src="/static/images/{{ product.image }}">
+
+                <h3>{{ product.name }}</h3>
+
+                <p class="price">
+                    €{{ product.price }}
+                </p>
+
+                <a href="/add_to_cart/{{ product.id }}" class="btn">
+                    Add to Cart
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</div>
+
+<footer class="footer">
+    <p>© 2025 Veloura. All rights reserved.</p>
+    <p>Premium skincare for radiant beauty.</p>
+</footer>
+
+<script>
+function searchProducts() {
+    let input = document.getElementById("searchInput").value.toLowerCase();
+    let cards = document.getElementsByClassName("product-card");
+
+    for (let i = 0; i < cards.length; i++) {
+        let productName = cards[i].getElementsByTagName("h3")[0].innerText.toLowerCase();
+
+        if (productName.includes(input)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+function filterCategory(category) {
+    let cards = document.getElementsByClassName("product-card");
+
+    for (let i = 0; i < cards.length; i++) {
+        let productName = cards[i].getElementsByTagName("h3")[0].innerText.toLowerCase();
+
+        if (category === "all") {
+            cards[i].style.display = "block";
+        } else if (productName.includes(category)) {
+            cards[i].style.display = "block";
+        } else {
+            cards[i].style.display = "none";
+        }
+    }
+}
+</script>
+
+</body>
+</html>
